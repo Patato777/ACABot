@@ -29,6 +29,6 @@ async def on_message(msg):
             await msg.channel.send("FEUR")
 
 
-bot.run("ODkzMjM5MTg0MTQ2NDM2MTg3.YVYj0Q.w70GM-fYKfhJNuTI_IyNG5Nskrs")
+bot.run(input('Token: '))
 
 # TODO: Réveil à 13:12
