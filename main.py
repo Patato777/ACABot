@@ -1,6 +1,7 @@
 import discord
 
-REPLACE = {"putain": "ofan de chichoune", "fils de pute": "fils de flic"}
+with open('replace', 'r') as f:
+    REPLACE = eval(f.read())
 
 bot = discord.Client()
 
@@ -20,7 +21,12 @@ def replace(text, old, new):
 @bot.event
 async def on_message(msg):
     if msg.author != bot.user:
-        if "di" in msg.content.lower():
+        if msg.content.startswith("!replace"):
+            old, new = msg.content[9:].split('/')
+            REPLACE.update({old: new})
+            with open('replace', 'w') as f:
+                f.write(str(REPLACE))
+        elif "di" in msg.content.lower():
             await msg.channel.send(msg.content.lower().split("di")[-1])
         elif "dy" in msg.content.lower():
             await msg.channel.send(msg.content.lower().split("dy")[-1])
