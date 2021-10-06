@@ -1,4 +1,5 @@
 import discord
+import re
 
 with open('replace', 'r') as f:
     REPLACE = eval(f.read())
@@ -21,26 +22,28 @@ def replace(text, old, new):
 @bot.event
 async def on_message(msg):
     if msg.author != bot.user:
+        test_koi = ''.join([c for c in msg.content.lower() if c.isalpha()])
+        dit = re.match(r'(?<=[Dd][IYiy]).*', msg.content)
+        cri = re.match(r'(?<=[cC][rR][iIyY]).*', msg.content)
         if msg.content.startswith("!replace"):
             old, new = msg.content[9:].split('/')
             REPLACE.update({old: new})
             with open('replace', 'w') as f:
                 f.write(str(REPLACE))
-        elif "di" in msg.content.lower():
-            await msg.channel.send(msg.content.lower().split("di")[-1])
-        elif "dy" in msg.content.lower():
-            await msg.channel.send(msg.content.lower().split("dy")[-1])
+        elif dit is not None:
+            await msg.channel.send(dit.groups()[-1])
+        elif cri is not None:
+            await msg.channel.send(cri.groups()[-1].upper())
         elif "du coup" in msg.content.lower():
             await msg.channel.send('Non, pas du coup, non')
+        elif re.search(r'((qu)|k)oi[tepsdh]$', test_koi, re.MULTILINE) is not None:
+            await msg.channel.send("FEUR")
+        elif re.search(r'(^| )gens($| )', msg.content.lower()) is not None:
+            await msg.channel.send("C'est <@276419613703798784> Jean")
         else:
             for key in REPLACE.keys():
                 if key in msg.content.lower():
                     await msg.channel.send("*" + replace(msg.content, key, REPLACE[key]))
-        test_koi = ''.join([c for c in msg.content.lower() if c.isalpha()])
-        if test_koi.endswith("quoi") or test_koi.endswith("koi") or (
-                test_koi[-1] in ['t', 'e', 'p', 's', 'd', 'h'] and (
-                test_koi[:-1].endswith("quoi") or test_koi[:-1].endswith("koi"))):
-            await msg.channel.send("FEUR")
 
 
 bot.run(input('Token: '))
