@@ -28,7 +28,7 @@ class Schedule:
         return f'{self.month_conv[month]}-{day.zfill(2)}'
 
     def init_dates(self):
-        for date, name in self.birthdays:
+        for date, name in self.birthdays.items():
             self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
 
     def add_date(self, string):
