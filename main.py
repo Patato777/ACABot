@@ -76,7 +76,7 @@ async def on_message(msg):
             await msg.channel.send(cri.group().upper())
         elif "du coup" in msg.content.lower():
             await msg.channel.send('Non, pas du coup, non')
-        elif re.search(r'((qu)|k)oi[tepsdh]$', test_koi, re.MULTILINE) is not None:
+        elif re.search(r'((qu)|k)oi[tepsdh]$', test_koi) is not None:
             await msg.channel.send("FEUR")
         elif re.search(r'(^| )gens($| )', msg.content.lower()) is not None:
             await msg.channel.send("C'est <@276419613703798784> Jean")
@@ -87,5 +87,3 @@ async def on_message(msg):
 
 
 bot.run(input('Token: '))
-
-# TODO: Réveil à 13:12
