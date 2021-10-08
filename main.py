@@ -1,10 +1,39 @@
 import discord
 import re
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
 with open('replace', 'r') as f:
     REPLACE = eval(f.read())
 
+
+class Schedule:
+    month_conv = {'janvier': '2022-01', 'février': '2022-02', 'mars': '2022-03', 'avril': '2022-04', 'mai': '2022-05',
+                  'juin': '2022-06', 'juillet': '2022-07', 'aout': '2022-08', 'septembre': '2022-09',
+                  'octobre': '2021-10', 'novembre': '2021-11', 'décembre': '2021-12'}
+
+    def __init__(self):
+        self.scheduler = AsyncIOScheduler()
+        with open('birthdays', 'r') as f:
+            self.birthdays = dict()
+            for line in f:
+                name, date = line.split(' - ')
+                self.birthdays.update({self.convert_date(date): name})
+        self.scheduler.start()
+        self.init_dates()
+        self.scheduler.add_job(treize_douze, 'cron', hour=13, minute=12)
+
+    def convert_date(self, date):
+        day, month = date.split(' ')
+        return f'{self.month_conv[month]}-{day.zfill(2)}'
+
+    def init_dates(self):
+        for date, name in self.birthdays:
+            self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
+
+
 bot = discord.Client()
+schedule = Schedule()
 
 
 def replace(text, old, new):
@@ -17,6 +46,14 @@ def replace(text, old, new):
         elif prev + len(old) - 1 < i:
             send += c
     return send
+
+
+async def happy_birthday(name):
+    await bot.get_channel(889469447050510349).send(f"C'est l'anniversaire de {name} aujourd'hui !")
+
+
+async def treize_douze():
+    await bot.get_channel(889469447050510349).send('13h12')
 
 
 @bot.event
