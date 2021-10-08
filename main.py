@@ -32,7 +32,7 @@ class Schedule:
             self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
 
     def add_date(self, string):
-        date, name = string.split(' - ')
+        name, date = string.split(' - ')
         date = self.convert_date(date)
         self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
 
