@@ -18,7 +18,7 @@ class Schedule:
             self.birthdays = dict()
             for line in f:
                 name, date = line.split(' - ')
-                self.birthdays.update({self.convert_date(date): name})
+                self.birthdays.update({self.convert_date(date.lower()): name})
         self.scheduler.start()
         self.init_dates()
         self.scheduler.add_job(treize_douze, 'cron', hour=13, minute=12)
