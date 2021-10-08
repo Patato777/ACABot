@@ -17,7 +17,7 @@ class Schedule:
         with open('birthdays', 'r') as f:
             self.birthdays = dict()
             for line in f:
-                name, date = line.split(' - ')
+                name, date = line.strip().split(' - ')
                 self.birthdays.update({self.convert_date(date.lower()): name})
         self.scheduler.start()
         self.init_dates()
@@ -32,7 +32,7 @@ class Schedule:
             self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
 
     def add_date(self, string):
-        name, date = string.split(' - ')
+        name, date = string.strip().split(' - ')
         date = self.convert_date(date)
         self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
 
@@ -73,7 +73,7 @@ async def on_message(msg):
                 f.write(str(REPLACE))
         elif msg.content.startswith('!birthday'):
             with open('birthdays', 'a') as f:
-                f.write(msg.content[10:])
+                f.write(msg.content[10:] + '\n')
             schedule.add_date(msg.content[10:])
         elif dit is not None:
             await msg.channel.send(dit.group())
