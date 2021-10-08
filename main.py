@@ -60,8 +60,8 @@ async def treize_douze():
 async def on_message(msg):
     if msg.author != bot.user:
         test_koi = ''.join([c for c in msg.content.lower() if c.isalpha()])
-        dit = re.match(r'(?<=[Dd][IYiy]).*$', msg.content)
-        cri = re.match(r'(?<=[cC][rR][iIyY]).*$', msg.content)
+        dit = re.search(r'(?<=[Dd][IYiy]).*$', msg.content)
+        cri = re.search(r'(?<=[cC][rR][iIyY]).*$', msg.content)
         if msg.content.startswith("!replace"):
             old, new = msg.content[9:].split('/')
             REPLACE.update({old: new})
