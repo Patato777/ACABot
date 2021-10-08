@@ -31,6 +31,11 @@ class Schedule:
         for date, name in self.birthdays:
             self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
 
+    def add_date(self, string):
+        date, name = string.split(' - ')
+        date = self.convert_date(date)
+        self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
+
 
 bot = discord.Client()
 schedule = Schedule()
@@ -69,7 +74,8 @@ async def on_message(msg):
                 f.write(str(REPLACE))
         elif msg.content.startswith('!birthday'):
             with open('birthdays', 'a') as f:
-                f.write(msg.content[9:])
+                f.write(msg.content[10:])
+            schedule.add_date(msg.content[10:])
         elif dit is not None:
             await msg.channel.send(dit.group())
         elif cri is not None:
