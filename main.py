@@ -67,6 +67,9 @@ async def on_message(msg):
             REPLACE.update({old: new})
             with open('replace', 'w') as f:
                 f.write(str(REPLACE))
+        elif msg.content.startswith('!birthday'):
+            with open('birthdays', 'a') as f:
+                f.write(msg.content[9:])
         elif dit is not None:
             await msg.channel.send(dit.groups()[-1])
         elif cri is not None:
