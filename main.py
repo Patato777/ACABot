@@ -60,8 +60,8 @@ async def treize_douze():
 async def on_message(msg):
     if msg.author != bot.user:
         test_koi = ''.join([c for c in msg.content.lower() if c.isalpha()])
-        dit = re.match(r'(?<=[Dd][IYiy]).*', msg.content)
-        cri = re.match(r'(?<=[cC][rR][iIyY]).*', msg.content)
+        dit = re.match(r'(?<=[Dd][IYiy]).*$', msg.content)
+        cri = re.match(r'(?<=[cC][rR][iIyY]).*$', msg.content)
         if msg.content.startswith("!replace"):
             old, new = msg.content[9:].split('/')
             REPLACE.update({old: new})
@@ -71,9 +71,9 @@ async def on_message(msg):
             with open('birthdays', 'a') as f:
                 f.write(msg.content[9:])
         elif dit is not None:
-            await msg.channel.send(dit.groups()[-1])
+            await msg.channel.send(dit.group())
         elif cri is not None:
-            await msg.channel.send(cri.groups()[-1].upper())
+            await msg.channel.send(cri.group().upper())
         elif "du coup" in msg.content.lower():
             await msg.channel.send('Non, pas du coup, non')
         elif re.search(r'((qu)|k)oi[tepsdh]$', test_koi, re.MULTILINE) is not None:
