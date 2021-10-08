@@ -38,7 +38,6 @@ class Schedule:
 
 
 bot = discord.Client()
-schedule = Schedule()
 
 
 def replace(text, old, new):
@@ -92,4 +91,5 @@ async def on_message(msg):
                     await msg.channel.send("*" + replace(msg.content, key, REPLACE[key]))
 
 
+schedule = Schedule()
 bot.run(input('Token: '))
