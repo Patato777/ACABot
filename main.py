@@ -1,5 +1,6 @@
 import discord
 import re
+import time
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -29,12 +30,12 @@ class Schedule:
 
     def init_dates(self):
         for date, name in self.birthdays.items():
-            self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
+            self.scheduler.add_job(happy_birthday, 'date', run_date=date)
 
     def add_date(self, string):
         name, date = string.strip().split(' - ')
-        date = self.convert_date(date)
-        self.scheduler.add_job(lambda: happy_birthday(name), 'date', run_date=date)
+        date = self.convert_date(date.lower())
+        self.scheduler.add_job(happy_birthday, 'date', run_date=date)
 
 
 bot = discord.Client()
@@ -52,7 +53,8 @@ def replace(text, old, new):
     return send
 
 
-async def happy_birthday(name):
+async def happy_birthday():
+    name = schedule.birthdays[time.strftime('%Y-%m-%d')]
     await bot.get_channel(889469447050510349).send(f"C'est l'anniversaire de {name} aujourd'hui !")
 
 
